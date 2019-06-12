@@ -5,7 +5,7 @@
     const app = express()
     const admin = require("./routes/admin")
     const path = require("path")
-    const mongoose = require("mongoose");
+    const mongoose = require("mongoose")
 
 //Configurações
     //Body Parser
