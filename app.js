@@ -14,6 +14,9 @@
     require("./models/Postagem")
     const Postagem = mongoose.model("postagens")
 
+    require("./models/Categoria")
+    const Categoria = mongoose.model("categorias")
+
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -40,7 +43,7 @@
     //Handlebars
         app.engine('handlebars', handlebars({
             defaultLayout: 'main',
-            helpers: {
+            helpers: { // Helper -> usando para formatação de datas
                 formatDate: (date) => {
                     return moment(date).format('DD/MM/YYYY')
                 }
@@ -48,21 +51,21 @@
         }));
         
         app.set('view engine', 'handlebars');    
+
     // Mongoose
         mongoose.connect("mongodb://localhost/blogapp", {useNewUrlParser: true}).then(() => {
             console.log("Conectado ao MongoDB")
         }).catch((error) => {
             console.log("Erro ao se conectar: "+ error)
         }) 
-    //
-
+ 
     //Public 
         app.use(express.static(path.join(__dirname, "public")))
         
 
 
 //Rotas
-    app.use('/admin', admin)
+    
 
     //Rota Principal
     app.get("/", (req, res) => {
@@ -90,11 +93,53 @@
             res.redirect("/")
         })    
     })
+
+    //Listagem de categorias
+    app.get("/categorias", (req, res) => {
+        Categoria.find().then((categorias) => {
+            res.render("categorias/index", {categorias: categorias})
+        }).catch((error) => {
+            req.flash("error_msg", "Houve um erro interno ao listar as categorias.")
+            res.redirect("/")
+        }) 
+    })
+
+    //Listar postagens pertencentes a uma certa categoria
+    app.get("/categorias/:slug", (req, res) =>{
+        Categoria.findOne({slug: req.params.slug}).then((categoria) => {
+
+            if(categoria){
+               
+                Postagem.find({categoria: categoria._id}).then((postagens) => {
+
+                    res.render("categorias/postagens", {postagens: postagens, categoria: categoria})
+
+                }).catch((error) => {
+
+                    req.flash("error_msg", "Houve um erro ao listar as postagens.")
+                    res.redirect("/")
+                }) 
+
+            } else {
+
+                req.flash("error_msg", "Essa categoria não existe.")
+                res.redirect("/")    
+
+            }
+
+        }).catch((error) => {
+            req.flash("error_msg", "Houve um erro interno ao carregar a página dessa categoria.")
+            res.redirect("/")
+        })
+    })
     
     //Rota de erro
     app.get("/404", (req, res) => {
         res.send("Error 404!")
     })
+    
+
+    app.use('/admin', admin)
 
 
 //Outros
