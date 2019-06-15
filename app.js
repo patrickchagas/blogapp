@@ -9,6 +9,9 @@
     const session = require("express-session")
     const flash = require("connect-flash")
 
+    require("./models/Postagem")
+    const Postagem = mongoose.model("postagens")
+
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -50,6 +53,21 @@
 
 //Rotas
     app.use('/admin', admin)
+
+    //Rota Principal
+    app.get("/", (req, res) => {
+        Postagem.find().populate("categoria").sort({data: "desc"}).then((postagens) =>{
+            res.render("index", {postagens: postagens})
+        }).catch((error) => {
+            req.flash("error_msg", "Houve um erro interno.")
+            res.redirect("/404")
+        })
+    })  
+    
+    //Rota de erro
+    app.get("/404", (req, res) => {
+        res.send("Error 404!")
+    })
 
 
 //Outros
