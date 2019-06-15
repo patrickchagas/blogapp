@@ -7,7 +7,7 @@
         <div class="card-body">
             <h4>Nome da categoria: {{nome}}</h4>
             <small>Slug: {{slug}}</small><br>
-            <small>Data de criação: {{date}}</small><br>
+            <small>Data de criação: {{#formatDate date}} {{/formatDate}}</small><br>
             <a href="/admin/categorias/edit/{{_id}}"><button class="btn btn-success mt-4">Editar Categoria</button></a>
 
             <form action="/admin/categorias/deletar" method="post">
