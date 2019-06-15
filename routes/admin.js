@@ -78,6 +78,7 @@ router.get("/categorias/edit/:id", (req, res) => {
     })  
 })
 
+//Salvar a edição da categoria
 router.post("/categorias/edit", (req, res) => {
 
     Categoria.findOne({_id: req.body.id}).then((categoria) => {
@@ -112,6 +113,21 @@ router.post("/categorias/deletar", (req, res) => {
     }).catch((error) => {
         req.flash("error_msg", "Houve um erro ao deletar categoria.")
         res.redirect("/admin/categorias")
+    })
+})
+
+//Listagem de postagens
+router.get("/postagens", (req, res) => {
+    res.render("admin/postagens")  
+})
+
+//Tela de cadastro de postagem
+router.get("/postagens/add", (req, res) =>{
+    Categoria.find().then((categorias) =>{
+        res.render("admin/addpostagem", {categorias: categorias})
+    }).catch((error) => {
+        req.flash("error_msg", "Houve um erro ao carregar o formulário")
+        res.redirect("/admin")
     })
 })
 
