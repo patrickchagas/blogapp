@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -12,7 +13,6 @@ router.get("/cadastro", (req, res) => {
 router.post("/cadastro", (req, res) =>{
 
     var erros = []
-
 
     //Validação de dados do formulário
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
@@ -32,7 +32,7 @@ router.post("/cadastro", (req, res) =>{
         erros.push({texto: "Senha muito curta!"})
     }
 
-    //Verificar se a senha repetida é igual 
+    //Verificar se a senha repetida é diferente 
     if(req.body.senha != req.body.senha2){
         erros.push({texto: "As senhas são diferentes, tente novamente."})
     }
@@ -42,7 +42,51 @@ router.post("/cadastro", (req, res) =>{
         res.render("usuarios/cadastro", {erros: erros})
 
     }else{
-        //
+        
+        Usuario.findOne({email: req.body.email}).then((usuario) => {    
+            if(usuario){
+                req.flash("error_msg", "Já existe uma conta com esse e-email no nosso sistema.")
+                res.redirect("/usuarios/cadastro")
+
+            }else{
+                 
+                const novoUsuario = new Usuario({
+                    nome: req.body.nome,
+                    email: req.body.email,
+                    senha: req.body.senha
+                })
+
+                //Gerar HASH de senha
+                //Salt -> um valor aleatório misturado com hash
+                bcrypt.genSalt(10, (erro, salt) => {
+                    bcrypt.hash(novoUsuario.senha, salt, (erro, hash) => {
+                        if(erro){
+                            req.flash("error_msg", "Houve um erro ao cadastrar usuário.")
+                            res.redirect("/")
+                        } 
+
+                        novoUsuario.senha = hash
+
+                        novoUsuario.save().then(() =>{
+
+                            req.flash("success_msg", "Usuário cadastrado com sucesso. ")
+                            res.redirect("/")
+
+                        }).catch((error) => {
+                            req.flash("error_msg", "Houve um erro ao cadastrar usuário.")
+                            res.redirect("/")
+                        })
+
+                        
+                    })
+                })   
+
+            }
+        }).catch((error) => {
+            req.flash("error_msg", "Houve um erro interno.")
+            res.redirect("/")
+        })
+
     }
 
 })
