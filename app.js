@@ -20,6 +20,9 @@
     const admin = require("./routes/admin")
     const usuarios = require("./routes/usuario")
 
+    const passport = require("passport")
+    require("./config/auth")(passport)
+
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -28,6 +31,9 @@
             resave: true,
             saveUninitialized: true 
         }))
+        //Configuração do Passport
+        app.use(passport.initialize())
+        app.use(passport.session())
 
         //flash
         app.use(flash())
