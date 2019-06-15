@@ -2,6 +2,8 @@
     const express = require("express")
     const handlebars = require("express-handlebars")
     const bodyParser = require("body-parser")
+    const moment = require('moment') // formatar datas
+
     const app = express()
     const admin = require("./routes/admin")
     const path = require("path")
@@ -36,7 +38,15 @@
         app.use(bodyParser.urlencoded({extended: true}))
         app.use(bodyParser.json())
     //Handlebars
-        app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+        app.engine('handlebars', handlebars({
+            defaultLayout: 'main',
+            helpers: {
+                formatDate: (date) => {
+                    return moment(date).format('DD/MM/YYYY')
+                }
+            }
+        }));
+        
         app.set('view engine', 'handlebars');    
     // Mongoose
         mongoose.connect("mongodb://localhost/blogapp", {useNewUrlParser: true}).then(() => {
