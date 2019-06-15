@@ -227,6 +227,19 @@ router.post("/postagem/edit", (req, res) => {
 
 })
 
+//Deletar postagem 
+//Outra forma de deletar, mas não é tão segura
+router.get("/postagens/deletar/:id", (req, res) =>{
+
+    Postagem.remove({_id: req.params.id}).then(() => {
+        req.flash("error_msg", "Postagem deletada com sucesso.")
+        res.redirect("/admin/postagens")
+    }).catch((error) => {
+        req.flash("error_msg", "Houve um erro interno.")
+        res.redirect("/admin/postagens")
+    })
+})
+
 
 
 
