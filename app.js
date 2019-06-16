@@ -23,6 +23,8 @@
     const passport = require("passport")
     require("./config/auth")(passport)
 
+    const {eAdmin} = require("./helpers/eAdmin") //{eAdmin}-> significa pegar apenas esta função    
+
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -44,6 +46,7 @@
             res.locals.success_msg = req.flash("success_msg"),
             res.locals.error_msg = req.flash("error_msg")
             res.locals.error = req.flash("error")
+            res.locals.user = req.user || null
             next()
         })
 
@@ -148,8 +151,8 @@
         res.send("Error 404!")
     })
     
-
-    app.use('/admin', admin)
+    //eAdmin -> Verificar se o usuário tem permissão de administrador
+    app.use('/admin', eAdmin, admin)
     app.use("/usuarios", usuarios)
 
 
