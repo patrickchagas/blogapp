@@ -2,6 +2,7 @@
     <div class="card-body">
         <h1>{{postagem.titulo}}</h1>
         <hr>
+        <small>Autor: {{postagem.autor}} </small><br>
         <small>Data de Publicação: {{#formatDate postagem.data}}{{/formatDate}}</small><br>
         <hr>
         {{postagem.conteudo}}

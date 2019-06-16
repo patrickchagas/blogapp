@@ -25,7 +25,8 @@
 
     const {eAdmin} = require("./helpers/eAdmin") //{eAdmin}-> significa pegar apenas esta função    
 
-    
+    const db = require("./config/db")
+
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -70,7 +71,7 @@
         app.set('view engine', 'handlebars');    
 
     // Mongoose
-        mongoose.connect("mongodb://localhost/blogapp", {useNewUrlParser: true}).then(() => {
+        mongoose.connect(db.mongoURI, {useNewUrlParser: true}).then(() => {
             console.log("Conectado ao MongoDB")
         }).catch((error) => {
             console.log("Erro ao se conectar: "+ error)
@@ -160,7 +161,7 @@
 
 
 //Outros
-const PORT = 8081;
+const PORT = process.env.PORT || 8081;
 app.listen(PORT, () =>{
     console.log("Servidor rodando!");
 });

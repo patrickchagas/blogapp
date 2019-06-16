@@ -169,7 +169,10 @@ router.post("/postagens/nova", eAdmin, (req, res) =>{
             descricao: req.body.descricao,
             conteudo: req.body.conteudo,
             categoria: req.body.categoria,
+            autor: req.body.autor
         }
+
+        console.log(novaPostagem)
 
         new Postagem(novaPostagem).save().then(() =>{
             req.flash("success_msg", "Postagem criada com sucesso.")
@@ -213,6 +216,7 @@ router.post("/postagem/edit", eAdmin, (req, res) => {
         postagem.descricao = req.body.descricao,
         postagem.conteudo = req.body.conteudo,
         postagem.categoria = req.body.categoria
+        postagem.autor = req.body.autor
 
         postagem.save().then(() => {
             req.flash("success_msg", "Postagem editada com sucesso.")
