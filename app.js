@@ -25,6 +25,7 @@
 
     const {eAdmin} = require("./helpers/eAdmin") //{eAdmin}-> significa pegar apenas esta função    
 
+    
 //Configurações
     //Sessão
         //Tudo que tiver app.use é um middleware
@@ -61,6 +62,7 @@
                     return moment(date).format('DD/MM/YYYY')
                 }
             }
+            
         }));
 
         
