@@ -13,19 +13,34 @@
       <li class="nav-item">
         <a class="nav-link" href="/categorias">Categorias</a>
       </li>
+
       {{#if user}}
-      <li class="nav-item">
-        <a class="nav-link" href="/usuarios/logout" >Sair</a>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{user.nome}}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Perfil</a>
+          <a class="dropdown-item" href="#">Mensagens</a>
+          <a class="dropdown-item" href="#">Configurações</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/usuarios/logout">Sair</a>
+        </div>
       </li>
+
       {{else}}
-      <li class="nav-item">
+      <li class="nav-item ">
         <a class="nav-link" href="/usuarios/login" >Login</a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item ">
         <a class="nav-link" href="/usuarios/cadastro" >Cadastro</a>
       </li>
       {{/if}}
+
     </ul>
+
+    
   </div>
 </nav>

@@ -55,13 +55,15 @@
         app.use(bodyParser.json())
     //Handlebars
         app.engine('handlebars', handlebars({
-            defaultLayout: 'main',
+            defaultLayout: ('main'),
             helpers: { // Helper -> usando para formatação de datas
                 formatDate: (date) => {
                     return moment(date).format('DD/MM/YYYY')
                 }
             }
         }));
+
+        
         
         app.set('view engine', 'handlebars');    
 
@@ -79,7 +81,6 @@
 
 //Rotas
     
-
     //Rota Principal
     app.get("/", (req, res) => {
         Postagem.find().populate("categoria").sort({data: "desc"}).then((postagens) =>{
