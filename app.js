@@ -72,7 +72,7 @@
 
     // Mongoose
         mongoose.connect(db.mongoURI, {useNewUrlParser: true}).then(() => {
-            console.log("Conectado ao MongoDB")
+            console.log("Conectado ao MongoDB!")
         }).catch((error) => {
             console.log("Erro ao se conectar: "+ error)
         }) 
